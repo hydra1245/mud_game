@@ -1,13 +1,13 @@
 package game.server;
 
 public class Monster extends Unit {
-	String monName;
-	int monHp;
+//	String monName;
+//	int monHp;
 	int monAttack;
 	
 	public Monster(String name, int monHp){
-		this.monName = name;
-		this.monHp = monHp;
+		super.Name = name;
+		super.hp = monHp;
 	}
 	
 	@Override
