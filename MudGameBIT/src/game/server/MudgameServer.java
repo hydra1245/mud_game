@@ -9,18 +9,22 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class MudgameServer {
-	
+		 static int playerCount = 0;
 	public static void main(String[] args) {
 		try{
 			ServerSocket server = new ServerSocket(10001);
 			System.out.println("접속을 기다립니다.");
-			
+			HashMap hm = new HashMap();
 			while(true){
 				Socket sock = server.accept();
-				MudgameServerThread mgst = new MudgameServerThread(sock);
+				playerCount++;
+				System.out.println("playercount :"  +playerCount);
+				MudgameServerThread mgst = new MudgameServerThread(sock,hm);
 				mgst.start();
 			}
 	}catch(Exception e){
@@ -35,10 +39,11 @@ class MudgameServerThread extends Thread{
 	private static OutputStream out;
 	private static PrintWriter pw;
 	private static BufferedReader br;
+	private HashMap hm;
 	//private boolean lineInput = true;
-	public MudgameServerThread(Socket sock){
+	public MudgameServerThread(Socket sock,HashMap hm){
 		this.sock = sock;
-		
+		this.hm = hm;
 	}
 	
 	public void run(){
@@ -52,6 +57,7 @@ class MudgameServerThread extends Thread{
 				String line = null;
 				String init = init();
 				Player p;
+				int playerCount = 0;
 				pw.println(init);
 				pw.flush();
 				/*while(lineInput){
@@ -69,14 +75,29 @@ class MudgameServerThread extends Thread{
 						progress = 2;
 					}else if(progress == 2){
 						p = new Player(line);
+						hm.put(p.name, pw);
 						gameIntro();
-						progress = 3;
 						pw.println("캐릭터명 : " +p.name);
 						pw.flush();
+						if(MudgameServer.playerCount == 4){
+							sendToAllMessage("플레이어가 모두 참여하였습니다. 게임을 시작합니다.");
+							progress = 3;
+						}
 					}
 				}
 		}catch(Exception ex){
 			System.out.println(ex);
+		}
+	}
+	public void sendToAllMessage(String message){
+		synchronized(hm){
+			Collection collection = hm.values();
+			Iterator iter = collection.iterator();
+			while(iter.hasNext()){
+				PrintWriter pw = (PrintWriter) iter.next();
+				pw.println(message);
+				pw.flush();
+			}
 		}
 	}
 	public String init(){
@@ -92,9 +113,11 @@ class MudgameServerThread extends Thread{
 		monsterInit();
 		String story = "개발자의 길을 걷기 위해.....";
 		System.out.println(story);
-		pw.println("캐릭터가 생성되었습니다. : " + story);
+		pw.println("캐릭터가 생성되었습니다. : 다른 플레이어가 접속할 때 까지 대기합니다." );
 		pw.flush();
+		
 	}
+	
 	public void monsterInit(){
 		Monster MonsterJava = new Monster("java",100);
 		Monster MonsterOracle = new Monster("Oracle",100);

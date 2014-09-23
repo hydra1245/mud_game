@@ -7,6 +7,7 @@ public class Player extends Unit {
 	int level = 1; //캐릭터 레벨
 	int area = 1; //지역
 	String name=null;
+	
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	public Player(String name){
 		this.hp = 200;
