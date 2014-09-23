@@ -40,6 +40,7 @@ class MudgameServerThread extends Thread{
 	private static PrintWriter pw;
 	private static BufferedReader br;
 	private HashMap hm;
+	//플레이어 객체 리스트는 여기서 만들어야 함!!
 	//private boolean lineInput = true;
 	public MudgameServerThread(Socket sock,HashMap hm){
 		this.sock = sock;
@@ -56,7 +57,7 @@ class MudgameServerThread extends Thread{
 				br = new BufferedReader(new InputStreamReader(in));
 				String line = null;
 				String init = init();
-				Player p;
+				Player p = null;
 				int playerCount = 0;
 				pw.println(init);
 				pw.flush();
@@ -83,13 +84,24 @@ class MudgameServerThread extends Thread{
 							sendToAllMessage("플레이어가 모두 참여하였습니다. 게임을 시작합니다.");
 							progress = 3;
 						}
+					}else if(progress == 3){
+						sendToAllMessage("지하 1층에 도착하였습니다.");
+						sendToAllMessage("개발자가 되기 위해 비트스쿨에 입학하였다. 그러나 개발자가 되는 "
+								+ "길은 만만치 않다.");
+						//System.out.println(p.playerList.get(0).name + "님이 이동합니다.");
+						/*for(int i = 1 ; i< p.playerList.size();i++){
+							System.out.println("size!!");
+							sleep(500);
+							sendToAllMessage(p.playerList.get(i).name + "님이 이동합니다.");
+						}*/
+						
 					}
 				}
 		}catch(Exception ex){
 			System.out.println(ex);
 		}
 	}
-	public void sendToAllMessage(String message){
+	public void sendToAllMessage(String message){ //클라이언트 전체에게 메시지 보내는 메소드
 		synchronized(hm){
 			Collection collection = hm.values();
 			Iterator iter = collection.iterator();

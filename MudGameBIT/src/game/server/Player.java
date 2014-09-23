@@ -8,13 +8,13 @@ public class Player extends Unit {
 	int area = 1; //지역
 	String name=null;
 	
-	private ArrayList<Player> playerList = new ArrayList<Player>();
+	
 	public Player(String name){
 		this.hp = 200;
 		this.level = 1;
 		this.area = 1;
 		this.name = name;
-		playerList.add(this);
+		
 	}
 	@Override
 	public void attack() { // 일반공격
