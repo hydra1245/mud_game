@@ -24,7 +24,10 @@ public class MudgameClient {
 			while(true){
 				
 				String echo = br.readLine();
-				System.out.println(echo);
+				String[] echo_split = echo.split(":");
+					for(int i = 0 ; i<echo_split.length;i++){
+						System.out.println(echo_split[i]);
+					}
 				line = keyboard.readLine();
 				if(line.equals("quit")) break;
 				pw.println(line);

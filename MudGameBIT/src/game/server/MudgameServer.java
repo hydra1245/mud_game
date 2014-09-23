@@ -35,6 +35,7 @@ class MudgameServerThread extends Thread{
 	private static OutputStream out;
 	private static PrintWriter pw;
 	private static BufferedReader br;
+	//private boolean lineInput = true;
 	public MudgameServerThread(Socket sock){
 		this.sock = sock;
 		
@@ -53,18 +54,25 @@ class MudgameServerThread extends Thread{
 				Player p;
 				pw.println(init);
 				pw.flush();
-				while(true){
+				/*while(lineInput){
 					line = br.readLine();
+					lineInput = false;
+					break;
+				}*/
+				while((line = br.readLine())!=null){
+					//line = br.readLine();
 					System.out.println("들어온 입력 : " + line);
 					if(line.equals("1") && progress == 1){
 						pw.println(characterInit());
 						pw.flush();
+						//lineInput = true;
 						progress = 2;
 					}else if(progress == 2){
 						p = new Player(line);
 						gameIntro();
 						progress = 3;
-						//pw.println("캐릭터명 : " +p.name);
+						pw.println("캐릭터명 : " +p.name);
+						pw.flush();
 					}
 				}
 		}catch(Exception ex){
@@ -84,17 +92,18 @@ class MudgameServerThread extends Thread{
 		monsterInit();
 		String story = "개발자의 길을 걷기 위해.....";
 		System.out.println(story);
-		pw.print("캐릭터가 생성되었습니다.");
-		pw.println(story);
+		pw.println("캐릭터가 생성되었습니다. : " + story);
 		pw.flush();
 	}
 	public void monsterInit(){
 		Monster MonsterJava = new Monster("java",100);
 		Monster MonsterOracle = new Monster("Oracle",100);
-		Monster MonsterBossChaheejin = new Monster("차희진",120);
-		Monster MonsterNetwork = new Monster("Network",130);
+		Monster MonsterNetwork = new Monster("Network",120);
 		Monster MonsterJSP = new Monster("JSP",130);
-		Monster MonsterBossLimjihun = new Monster("임지훈",170);
+		Monster MonsterXML = new Monster("XML",130);
+		Monster MonsterAjax = new Monster("Ajax",130);
+		Monster MonsterStruts = new Monster("Struts",170);
+		Monster MonsterSpring = new Monster("Spring",170);
 		Monster Boss = new Monster("Chohyunjung",200);
 	}
 }
