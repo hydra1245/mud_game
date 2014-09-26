@@ -3,17 +3,21 @@ package game.server;
 import java.util.ArrayList;
 
 public class Player extends Unit {
-	int hp = 200; //체력
-	int level = 1; //캐릭터 레벨
-	int area = 1; //지역
-	String name=null;
-	
+	final static int MAX_SKILL_GATE = 50;
+	static int distance;
+	int level; //캐릭터 레벨
+	int area; //지역
+	int bombCount; //폭탄 갯수
+	int potionCount; //포션 갯수
+	int skillGage; //스킬 게이지
 	
 	public Player(String name){
 		this.hp = 200;
 		this.level = 1;
 		this.area = 1;
 		this.name = name;
+		bombCount = 3;
+		potionCount = 3;
 		
 	}
 	@Override
@@ -25,8 +29,8 @@ public class Player extends Unit {
 		
 		System.out.println("아이템을 사용");
 	}
-	public void move(){ //이동
-		this.distance++;
+	public static void move(){ //이동
+		distance++;
 		System.out.println("이동합니다.");
 	}
 	public void skillAttack(int sel){ //스킬 사용
