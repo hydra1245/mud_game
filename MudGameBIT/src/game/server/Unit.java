@@ -1,9 +1,10 @@
 package game.server;
 
 public abstract class Unit {
-	static int distance;
-	int energy;
-	final static int max_damage = 20;
-	final static int min_damage = 10;
+	protected String name;
+	protected int hp;
+	protected int max_damage;
+	protected int min_damage;
+	protected String Name;
 	abstract public void attack();
 }
